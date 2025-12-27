@@ -5,83 +5,81 @@
 
 cmd_help() {
     show_logo
-    cat << EOF
-${BOLD}Usage:${NC} $SCRIPT_NAME <command> [options] [arguments]
-
-${BOLD}Key Management:${NC}
-  (default)              Create a new SSH key for a git repository
-  list                   List all sshgit-managed SSH keys
-  hosts                  Show all sshgit-managed hosts from SSH config
-  test <keyname>         Test SSH connection for a key
-  use <keyname>          Set SSH key for current git repository
-  remove <keyname>       Remove a key and its SSH config entry
-  select                 Interactive key selector (TUI)
-  import <keypath>       Import an existing SSH key
-
-${BOLD}Key Rotation & Security:${NC}
-  rotate <keyname>       Rotate a key (backup old, create new)
-  expire <keyname>       Set expiry reminder for a key
-  check-expiry           Show expiry status of all keys
-  doctor [keyname]       Run health check and diagnostics
-
-${BOLD}SSH Agent:${NC}
-  agent-add <keyname>    Add key to ssh-agent
-  agent-remove <keyname> Remove key from ssh-agent
-  agent-list             List keys in ssh-agent
-  agent-add-all          Add all managed keys to agent
-  agent-remove-all       Remove all managed keys from agent
-
-${BOLD}Remote Management:${NC}
-  remotes                Show remotes and their SSH keys
-  setup-remotes          Configure remotes with SSH keys
-
-${BOLD}Profiles & Teams:${NC}
-  profile <cmd>          Manage key profiles (list|create|show|delete)
-  team <cmd>             Team sync features (init|sync|add|info)
-
-${BOLD}Deploy Keys (API):${NC}
-  deploy-key push        Push deploy key via GitHub/GitLab API
-  deploy-key list        List deploy keys from repository
-  deploy-key remove      Remove deploy key via API
-
-${BOLD}Backup & Restore:${NC}
-  backup [path]          Backup all keys (--encrypt for GPG encryption)
-  restore <path>         Restore from backup (--decrypt for encrypted)
-
-${BOLD}Other:${NC}
-  hook <cmd>             Git hook management (install|uninstall|status)
-  config                 View and edit configuration
-  completion <shell>     Generate shell completion
-  help                   Show this help message
-  version                Show version
-
-${BOLD}Options:${NC}
-  -h, --help             Show help message
-  -v, --version          Show version
-  -c                     Auto-add to SSH config
-  -t, --type TYPE        Key type (ed25519, rsa, ecdsa) or RSA bits
-  -e, --email EMAIL      Custom email for key comment
-  -p, --passphrase       Prompt for passphrase
-  -P, --no-passphrase    Generate key without passphrase
-  -o, --open             Open deploy key URL in browser
-  --clipboard            Copy public key to clipboard
-  --profile <name>       Use a saved profile
-  -q, --quiet            Quiet mode (minimal output)
-
-${BOLD}Examples:${NC}
-  $SCRIPT_NAME                                # Interactive mode
-  $SCRIPT_NAME user/repo                      # Create key for GitHub repo
-  $SCRIPT_NAME user/repo --profile work       # Use profile
-  $SCRIPT_NAME select                         # Interactive key picker
-  $SCRIPT_NAME rotate github-user__repo       # Rotate a key
-  $SCRIPT_NAME doctor --fix                   # Fix permission issues
-  $SCRIPT_NAME backup --encrypt               # Encrypted backup
-  $SCRIPT_NAME team sync                      # Sync team config
-
-${BOLD}Documentation:${NC}
-  https://github.com/professor93/sshgit
-
-EOF
+    echo -e "${BOLD}Usage:${NC} $SCRIPT_NAME <command> [options] [arguments]"
+    echo ""
+    echo -e "${BOLD}Key Management:${NC}"
+    echo "  (default)              Create a new SSH key for a git repository"
+    echo "  list                   List all sshgit-managed SSH keys"
+    echo "  hosts                  Show all sshgit-managed hosts from SSH config"
+    echo "  test <keyname>         Test SSH connection for a key"
+    echo "  use <keyname>          Set SSH key for current git repository"
+    echo "  remove <keyname>       Remove a key and its SSH config entry"
+    echo "  select                 Interactive key selector (TUI)"
+    echo "  import <keypath>       Import an existing SSH key"
+    echo ""
+    echo -e "${BOLD}Key Rotation & Security:${NC}"
+    echo "  rotate <keyname>       Rotate a key (backup old, create new)"
+    echo "  expire <keyname>       Set expiry reminder for a key"
+    echo "  check-expiry           Show expiry status of all keys"
+    echo "  doctor [keyname]       Run health check and diagnostics"
+    echo ""
+    echo -e "${BOLD}SSH Agent:${NC}"
+    echo "  agent-add <keyname>    Add key to ssh-agent"
+    echo "  agent-remove <keyname> Remove key from ssh-agent"
+    echo "  agent-list             List keys in ssh-agent"
+    echo "  agent-add-all          Add all managed keys to agent"
+    echo "  agent-remove-all       Remove all managed keys from agent"
+    echo ""
+    echo -e "${BOLD}Remote Management:${NC}"
+    echo "  remotes                Show remotes and their SSH keys"
+    echo "  setup-remotes          Configure remotes with SSH keys"
+    echo ""
+    echo -e "${BOLD}Profiles & Teams:${NC}"
+    echo "  profile <cmd>          Manage key profiles (list|create|show|delete)"
+    echo "  team <cmd>             Team sync features (init|sync|add|info)"
+    echo ""
+    echo -e "${BOLD}Deploy Keys (API):${NC}"
+    echo "  deploy-key push        Push deploy key via GitHub/GitLab API"
+    echo "  deploy-key list        List deploy keys from repository"
+    echo "  deploy-key remove      Remove deploy key via API"
+    echo ""
+    echo -e "${BOLD}Backup & Restore:${NC}"
+    echo "  backup [path]          Backup all keys (--encrypt for GPG encryption)"
+    echo "  restore <path>         Restore from backup (--decrypt for encrypted)"
+    echo ""
+    echo -e "${BOLD}Other:${NC}"
+    echo "  hook <cmd>             Git hook management (install|uninstall|status)"
+    echo "  config                 View and edit configuration"
+    echo "  completion <shell>     Generate shell completion"
+    echo "  help                   Show this help message"
+    echo "  version                Show version"
+    echo ""
+    echo -e "${BOLD}Options:${NC}"
+    echo "  -h, --help             Show help message"
+    echo "  -v, --version          Show version"
+    echo "  -c                     Auto-add to SSH config"
+    echo "  -t, --type TYPE        Key type (ed25519, rsa, ecdsa) or RSA bits"
+    echo "  -e, --email EMAIL      Custom email for key comment"
+    echo "  -p, --passphrase       Prompt for passphrase"
+    echo "  -P, --no-passphrase    Generate key without passphrase"
+    echo "  -o, --open             Open deploy key URL in browser"
+    echo "  --clipboard            Copy public key to clipboard"
+    echo "  --profile <name>       Use a saved profile"
+    echo "  -q, --quiet            Quiet mode (minimal output)"
+    echo ""
+    echo -e "${BOLD}Examples:${NC}"
+    echo "  $SCRIPT_NAME                                # Interactive mode"
+    echo "  $SCRIPT_NAME user/repo                      # Create key for GitHub repo"
+    echo "  $SCRIPT_NAME user/repo --profile work       # Use profile"
+    echo "  $SCRIPT_NAME select                         # Interactive key picker"
+    echo "  $SCRIPT_NAME rotate github-user__repo       # Rotate a key"
+    echo "  $SCRIPT_NAME doctor --fix                   # Fix permission issues"
+    echo "  $SCRIPT_NAME backup --encrypt               # Encrypted backup"
+    echo "  $SCRIPT_NAME team sync                      # Sync team config"
+    echo ""
+    echo -e "${BOLD}Documentation:${NC}"
+    echo "  https://github.com/professor93/sshgit"
+    echo ""
 }
 
 cmd_version() {
