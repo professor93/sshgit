@@ -1,0 +1,74 @@
+name: Build and Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build and Upload Release Asset
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get release version
+        id: version
+        run: |
+          # Extract version from tag (remove 'v' prefix if present)
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Building version: $VERSION"
+
+      - name: Build sshgit
+        run: |
+          chmod +x build.sh
+          ./build.sh --version "${{ steps.version.outputs.version }}"
+
+      - name: Verify build
+        run: |
+          # Make executable
+          chmod +x sshgit
+
+          # Test version output
+          VERSION_OUTPUT=$(./sshgit --version)
+          echo "Built version: $VERSION_OUTPUT"
+
+          # Verify version matches
+          if [[ "$VERSION_OUTPUT" != *"${{ steps.version.outputs.version }}"* ]]; then
+            echo "ERROR: Version mismatch!"
+            echo "Expected: ${{ steps.version.outputs.version }}"
+            echo "Got: $VERSION_OUTPUT"
+            exit 1
+          fi
+
+          # Test help command
+          ./sshgit --help > /dev/null
+          echo "Build verification passed!"
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: sshgit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate checksums
+        run: |
+          sha256sum sshgit > sshgit.sha256
+          md5sum sshgit > sshgit.md5
+          cat sshgit.sha256
+          cat sshgit.md5
+
+      - name: Upload checksum files
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            sshgit.sha256
+            sshgit.md5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
